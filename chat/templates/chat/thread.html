@@ -11,6 +11,7 @@
     </ul>
 
     <form id='form' method='POST'> {% csrf_token %}
+        <input type="hidden" id="myUsername" value="{{ user.username }}">
         {{ form.as_p }}
         <input type='submit' class='btn btn-primary'/>
     </form>
@@ -22,6 +23,11 @@
     <script>
         // websocket script
         var loc = window.location;
+        var formData = $('#form');
+        var msgInput = $('#id_message');
+        var chatHolder = $('#chat-items');
+        var me = $('#myUsername').val();
+
         var wsStart = 'ws://';
         if (loc.protocol === 'https:') {
             wsStart = 'wss://'
@@ -30,10 +36,24 @@
         var socket = new WebSocket(endpoint);
 
         socket.onmessage = function (e) {
-            console.log("message", e)
+            console.log("message", e);
+            console.log(e.data)
+            chatDataMsg = JSON.parse(e.data)
+            chatHolder.append('<li>' + chatDataMsg.message +  ' via ' + chatDataMsg.username + '</li>')
         };
         socket.onopen = function (e) {
-            console.log("open", e)
+            console.log("open", e);
+
+            formData.submit(function (event) {
+                event.preventDefault();
+                var msgText = msgInput.val();
+                chatHolder.append('<li>' + msgText +  ' via ' + me + '</li>');
+                // var fromDataSerialized = formData.serialize();
+                var finalData = {
+                    'message': msgText
+                };
+                socket.send(JSON.stringify(finalData))
+            })
         };
         socket.onerror = function (e) {
             console.log("error", e)
