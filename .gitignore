@@ -97,3 +97,5 @@ media/*
 
 # local
 config/local.py
+Pipfile
+Pipenv.lock

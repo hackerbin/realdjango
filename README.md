@@ -1,0 +1,1 @@
+# Django Realtime application using django channel | websocket
