@@ -37,7 +37,7 @@
 
         socket.onmessage = function (e) {
             console.log("message", e);
-            console.log(e.data)
+            console.log(e.data);
             chatDataMsg = JSON.parse(e.data)
             chatHolder.append('<li>' + chatDataMsg.message +  ' via ' + chatDataMsg.username + '</li>')
         };
@@ -47,12 +47,13 @@
             formData.submit(function (event) {
                 event.preventDefault();
                 var msgText = msgInput.val();
-                chatHolder.append('<li>' + msgText +  ' via ' + me + '</li>');
+                {#chatHolder.append('<li>' + msgText +  ' via ' + me + '</li>');#}
                 // var fromDataSerialized = formData.serialize();
                 var finalData = {
                     'message': msgText
                 };
-                socket.send(JSON.stringify(finalData))
+                socket.send(JSON.stringify(finalData));
+                msgInput.val('')
             })
         };
         socket.onerror = function (e) {
