@@ -22,6 +22,7 @@ class ChatConsumer(AsyncConsumer):
         self.thread_obj = thread_obj
         print(me, thread_obj)
         chat_room = 'thread_{}'.format(thread_obj.id)
+        print('chat room', chat_room)
         self.chat_room = chat_room
         await self.channel_layer.group_add(
             chat_room,
